@@ -1,20 +1,14 @@
-/* BASE SETUP
-* ======================================================
-*/
+/* =================== BASE SETUP =================== */
 'use strict'
 
 // require necessary modules
 var express    = require('express');
 var bodyParser = require('body-parser');
-var mongoose   = require('mongoose');
-var User       = require('./app/models/user');
+// var User       = require('./app/models/user');
+var Movies     = require('./app/models/movie');
 
 // initialize the app
 var app = express();
-
-// connect to a modulus database
-// mongoose.connect('mongodb://node:node@novus.modulusmongo.net:27017/Iganiq8o');
-// mongoose.connect("localhost:27017/api");
 
 // configure app to use bodyParser()
 // this will let us get the data from a POST
@@ -24,17 +18,12 @@ app.use(bodyParser.json());
 // set the port for the app
 var port = process.env.PORT || 8080;
 
-/* ROUTES FOR OUR API
-* ======================================================
-*/
+/* =================== ROUTES FOR OUR API =================== */
 // initialize the router
 var router = express.Router();
 
 // middleware for all requests
 router.use(function(req, res, next) {
-    // log
-    // console.log('Abra Ca Dara');
-
     // dont stop. advance to routes
     next();
 });
@@ -46,19 +35,25 @@ router.get('/', function(req, res) {
 
 // get users
 router.get('/users', function(req, res) {
-    var text = User.talk();
+    // var text = User.talk();
 
     res.send(text);
 });
 
-/* REGISTER OUR ROUTES
-* ======================================================
-*/
+// get specific user
+router.get('/users/:id', function(req, res) {
+
+});
+
+// post user
+router.post('/users', function(req, res) {
+    res.send({ method: 'POST' });
+});
+
+/* =================== REGISTER OUR ROUTES =================== */
 // prefix our apis with /api
 app.use('/api', router);
 
-/* START THE SERVER
-* ======================================================
-*/
+/* =================== START THE SERVER =================== */
 app.listen(port);
-console.log('Abra Ca Dabra at port: ' + port);
+console.log('Server running at http://localhost/' + port);
