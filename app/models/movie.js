@@ -51,17 +51,19 @@ movieSchema.methods.findOneMovie = function() {
 movieSchema.methods.findAllMovies = function() {
     // find all movies
     // API: Model.find(conditions, [projection], [options], [callback])
-    Movie.find(function(error, movies) {
+    Movie.find(function(error, movies, affected) {
         if(error)
             console.error('Database fetch failed.' + error);
 
-        console.log(movies);
+        console.log('Rows affected : ' + affected);
+        
+        return movies;
     });
 };
 
-movieSchema.methods.findMovieBy = function() {
+movieSchema.methods.findMovieBy = function(projection, value) {
     // find movies using a projection
-    Movie.find({ releaseYear: 2011 }, function(error, movies) {
+    Movie.find({ projection: value }, function(error, movies) {
         if(error)
             console.error('Database fetch failed.' + error);
 
@@ -78,10 +80,10 @@ movieSchema.statics.findAllWithRating = function() {
 var Movie = mongoose.model('Movie', movieSchema);
 
 // CRUD operations
-var thor = new Movie({
-    title      : 'Thor',
-    rating     : 'PG-13',
-    releaseYear: 2011
-});
+// var thor = new Movie({
+//     title      : 'Thor',
+//     rating     : 'PG-13',
+//     releaseYear: 2011
+// });
 
-thor.findMovieBy();
+module.exports = Movie;
