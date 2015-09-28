@@ -4,7 +4,7 @@ var mongoose = require('mongoose');
 // connect to mongoose
 mongoose.connect('mongodb://localhost/test');
 
-//
+// connection handle
 var db = mongoose.connection;
 
 // connection error
@@ -18,11 +18,19 @@ db.on('open', function() {
     console.log('Connection to mongo eshtablished');
 });
 
-// define a schema
+// define a movie schema
 var movieSchema = new mongoose.Schema({
     title      : String,
     rating     : String,
     releaseYear: Number 
+});
+
+// define a user schema
+var userSchema = new mongoose.Schema({
+    name : 'String',
+    age  : 'Number',
+    work : 'String',
+    phone: 'Number'
 });
 
 // methods for our schema
@@ -51,11 +59,9 @@ movieSchema.methods.findOneMovie = function() {
 movieSchema.methods.findAllMovies = function() {
     // find all movies
     // API: Model.find(conditions, [projection], [options], [callback])
-    Movie.find(function(error, movies, affected) {
+    Movie.find(function(error, movies) {
         if(error)
             console.error('Database fetch failed.' + error);
-
-        console.log('Rows affected : ' + affected);
         
         return movies;
     });
@@ -78,6 +84,7 @@ movieSchema.statics.findAllWithRating = function() {
 
 // create a model for our schema
 var Movie = mongoose.model('Movie', movieSchema);
+var User  = mongoose.model('User', userSchema);
 
 // CRUD operations
 // var thor = new Movie({
@@ -86,4 +93,7 @@ var Movie = mongoose.model('Movie', movieSchema);
 //     releaseYear: 2011
 // });
 
-module.exports = Movie;
+module.exports = {
+    Movie : Movie,
+    User  : User
+};

@@ -4,19 +4,17 @@
 // require necessary modules
 var express    = require('express');
 var bodyParser = require('body-parser');
-				 
-var routes     = require('./app/routes')(express);
 
 // initialize the app
 var app = express();
 
-// initialise data warehouse
-// var movie = new Movie();
-
 // configure app to use bodyParser()
 // this will let us get the data from a POST
-app.use(bodyParser.urlencoded({ extended : true }));
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended : true }));
+
+// require our modules
+var routes = require('./app/routes')(app);
 
 // set the port for the app
 var port = process.env.PORT || 8080;

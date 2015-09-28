@@ -1,24 +1,24 @@
 /* =================== ROUTES FOR OUR API =================== */
-module.exports = function(express) {
+module.exports = function(app) {
 	// require necessary modules
-	var Movie = require('./models/movie');
+	var Movie = require('./models/movie').Movie;
 
 	// initialize the router
-	var router = express.Router();
+	// var router = express.Router();
 
 	// middleware for all requests
-	router.use(function(req, res, next) {
-	    // dont stop. advance to routes
-	    next();
-	});
+	// router.use(function(req, res, next) {
+	//     // dont stop. advance to routes
+	//     next();
+	// });
 
 	// test route
-	router.get('/', function(req, res) {
+	app.get('/', function(req, res) {
 	    res.json({ message: 'hooray!' });
 	});
 
-	// get users
-	router.get('/movies', function(req, res) {
+	// get movies	
+	app.get('/movies', function(req, res) {
 	    Movie.find(function(error, movies) {
 	        if(error)
 	            console.error('Database fetch failed.' + error);
@@ -28,16 +28,22 @@ module.exports = function(express) {
 	});
 
 	// get specific user
-	router.get('/users/:id', function(req, res) {
+	app.get('/users/:id', function(req, res) {
 
 	});
 
 	// post user
-	router.post('/users', function(req, res) {
+	app.post('/users', function(req, res) {
 	    res.send({ method: 'POST' });
+	});
+
+	// save a movie detail
+	app.post('/movie', function(req, res) {
+		res.send(req.body);
 	});
 
 	/* =================== REGISTER OUR ROUTES =================== */
 	// prefix our apis with /api
 	// app.use('/api', router);
+	// app.use('/api', require('./app/routes')(express));	
 };
