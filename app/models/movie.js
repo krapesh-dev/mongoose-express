@@ -1,6 +1,9 @@
 // require mongoose
 var mongoose = require('mongoose');
 
+// require schemas
+var movieSchema = require('../schema/schema.js')(mongoose).movieSchema;
+
 // connect to mongoose
 mongoose.connect('mongodb://localhost/test');
 
@@ -18,73 +21,60 @@ db.on('open', function() {
     console.log('Connection to mongo eshtablished');
 });
 
-// define a movie schema
-var movieSchema = new mongoose.Schema({
-    title      : String,
-    rating     : String,
-    releaseYear: Number 
-});
 
-// define a user schema
-var userSchema = new mongoose.Schema({
-    name : 'String',
-    age  : 'Number',
-    work : 'String',
-    phone: 'Number'
-});
 
 // methods for our schema
-movieSchema.methods.saveMovie = function() {
-    // save the model
-    // API: Model.save([options], document,)
-    thor.save(function(error, movie, affected) {
-        if(error)
-            console.error('Database update failed. ' + error);
+// movieSchema.methods.saveMovie = function(input) {
+//     // save the model
+//     // API: Model.save([options], document,)
+//     input.save(function(error, movie, affected) {
+//         if(error)
+//             console.error('Database update failed. ' + error);
 
-        console.log('Rows affected: ' + affected);
-    });
-};
+//         console.log('Rows affected: ' + affected);
+//     });
+// };
 
-movieSchema.methods.findOneMovie = function() {
-    // find a single movie by name
-    // API: Model.findOne(conditions, [projections], [options], [callback])
-    Movie.findOne({ title: 'Thor' }, function(error, movie) {
-        if(error)
-            console.error('Database fetch failed.' + error);
+// movieSchema.methods.findOneMovie = function() {
+//     // find a single movie by name
+//     // API: Model.findOne(conditions, [projections], [options], [callback])
+//     Movie.findOne({ title: 'Thor' }, function(error, movie) {
+//         if(error)
+//             console.error('Database fetch failed.' + error);
 
-        console.log(movie);
-    });
-};
+//         console.log(movie);
+//     });
+// };
 
-movieSchema.methods.findAllMovies = function() {
-    // find all movies
-    // API: Model.find(conditions, [projection], [options], [callback])
-    Movie.find(function(error, movies) {
-        if(error)
-            console.error('Database fetch failed.' + error);
+// movieSchema.methods.findAllMovies = function() {
+//     // find all movies
+//     // API: Model.find(conditions, [projection], [options], [callback])
+//     Movie.find(function(error, movies) {
+//         if(error)
+//             console.error('Database fetch failed.' + error);
         
-        return movies;
-    });
-};
+//         return movies;
+//     });
+// };
 
-movieSchema.methods.findMovieBy = function(projection, value) {
-    // find movies using a projection
-    Movie.find({ projection: value }, function(error, movies) {
-        if(error)
-            console.error('Database fetch failed.' + error);
+// movieSchema.methods.findMovieBy = function(projection, value) {
+//     // find movies using a projection
+//     Movie.find({ projection: value }, function(error, movies) {
+//         if(error)
+//             console.error('Database fetch failed.' + error);
 
-        console.log(movies);
-    });
-};
+//         console.log(movies);
+//     });
+// };
 
-// static helper functions
-movieSchema.statics.findAllWithRating = function() {
-    // return this.find({ })
-};
+// // static helper functions
+// movieSchema.statics.findAllWithRating = function() {
+//     // return this.find({ })
+// };
 
 // create a model for our schema
 var Movie = mongoose.model('Movie', movieSchema);
-var User  = mongoose.model('User', userSchema);
+// var User  = mongoose.model('User', userSchema);
 
 // CRUD operations
 // var thor = new Movie({
@@ -94,6 +84,6 @@ var User  = mongoose.model('User', userSchema);
 // });
 
 module.exports = {
-    Movie : Movie,
-    User  : User
+    Movie : Movie
+    // User  : User
 };
