@@ -2,11 +2,13 @@
   "name": "mongoose-express",
   "version": "1.0.0",
   "description": "crud api using mongoose and express",
-  "main": "index.js",
+  "main": "server.js",
   "dependencies": {
     "express": "~4.12.4",
     "mongoose": "~4.0.4",
-    "body-parser": "~1.13.3"
+    "body-parser": "~1.13.3",
+    "jsonwebtoken": "~5.0.5",
+    "morgan": "~1.6.1"
   },
   "devDependencies": {},
   "scripts": {

@@ -1,5 +1,5 @@
 /* =================== ROUTES FOR OUR API =================== */
-module.exports = function(app) {
+module.exports = function(app, config, jwt) {
     // require necessary modules
     var Movie = require('./models/movie').Movie;
 
@@ -11,6 +11,30 @@ module.exports = function(app) {
     //     // dont stop. advance to routes
     //     next();
     // });
+
+    // set secret key
+    app.set('superSecret', config.secret);
+
+    // authenticate
+    app.post('/xauthenticate', function(request, response) {
+        if('password' !== request.body.password) {
+            response.json({
+                success: false,
+                message: 'Authentication failed. Wrong password'
+            });
+        }
+        else {
+            var token = jwt.sign({ name:'name' }, app.get('superSecret'), {
+                expiresInMinutes: 10
+            });
+
+            response.send({
+                success: true,
+                message: 'Token generated',
+                token  : token
+            });
+        }
+    });
 
     // test route
     app.get('/', function(request, response) {
