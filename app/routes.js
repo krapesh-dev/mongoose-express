@@ -1,22 +1,48 @@
 /* =================== ROUTES FOR OUR API =================== */
-module.exports = function(app, config, jwt) {
+module.exports = function(app, appConfig, jwt) {
     // require necessary modules
     var Movie = require('./models/movie').Movie;
 
-    // initialize the router
-    // var router = express.Router();
-
-    // middleware for all requests
-    // router.use(function(req, res, next) {
-    //     // dont stop. advance to routes
-    //     next();
-    // });
-
     // set secret key
-    app.set('superSecret', config.secret);
+    app.set('superSecret', appConfig.secret);
+
+    // middleware to verify token
+    app.use(function(request, response, next) {
+        // skip route which returns token
+        console.log(request.path);
+
+        if(request.path === "/authenticate") {
+            next();
+        }
+        else {
+            var token = request.headers.token;
+
+            if(token) {
+                // verifies secret and checks expiry
+                jwt.verify(token, 'super-secret-key', function(error, decoded) {
+                    if(error) {
+                        return response.json({
+                            success: false,
+                            message: 'Failed to authenticate token'
+                        });
+                    }
+                    else {
+                        request.decoded = decoded;
+                        next();
+                    }
+                });
+            }
+            else {
+                return response.json({ 
+                    success: false, 
+                    message: 'No token provided' 
+                });
+            }
+        }
+    });
 
     // authenticate
-    app.post('/xauthenticate', function(request, response) {
+    app.post('/authenticate', function(request, response) {
         if('password' !== request.body.password) {
             response.json({
                 success: false,
@@ -38,7 +64,7 @@ module.exports = function(app, config, jwt) {
 
     // test route
     app.get('/', function(request, response) {
-        res.json({ message: 'hooray!' });
+        response.json({ message: 'hooray!' });
     });
 
     // get movies
@@ -74,9 +100,4 @@ module.exports = function(app, config, jwt) {
 
         response.sendStatus(response.statusCode);
     });
-
-    /* =================== REGISTER OUR ROUTES =================== */
-    // prefix our apis with /api
-    // app.use('/api', router);
-    // app.use('/api', require('./app/routes')(express));   
 };
