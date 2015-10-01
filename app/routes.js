@@ -43,6 +43,7 @@ module.exports = function(app, appConfig, jwt) {
 
     // authenticate
     app.post('/authenticate', function(request, response) {
+        // NOTE: can also query mongo to get admin credentials
         if('password' !== request.body.password) {
             response.json({
                 success: false,
@@ -50,6 +51,7 @@ module.exports = function(app, appConfig, jwt) {
             });
         }
         else {
+            // NOTE: pass response from mongo as first parameter
             var token = jwt.sign({ name:'name' }, app.get('superSecret'), {
                 expiresInMinutes: 10
             });
